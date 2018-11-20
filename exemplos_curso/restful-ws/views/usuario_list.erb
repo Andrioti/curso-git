@@ -1,0 +1,6 @@
+        <h1>Usuarios Cadastrados:</h1>
+        <% @@usuarios.each do |usuario| %>
+        <p><%= usuario["user"] %></p> 
+        <% end %> 
+        </br>
+        <a href="/usuario/new">Novo usuário</a>

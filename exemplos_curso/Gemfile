@@ -1,0 +1,6 @@
+source "https://rubygems-internal.dafirma.org"
+
+gem "mysql"
+gem "codeops"
+gem "smarter_csv"
+gem 'cpf_cnpj'

@@ -1,0 +1,323 @@
+Anotações Linux
+
+AULA 01 com Jeferson
+RHCE RHCI
+
+Linux é um kernel, não é OS
+Diferentes entre Free e Open Software 
+Posso vender uma mídia com um software que baixei de graça 
+da internet
+
+Projeto Fedora mantido pela RH, cobaia, devs codando de graça, melhoria boa vai para RHE
+
+CentOS era comunidade, acho que foi comprado pela RH
+
+##Começando
+usuario@maquina 
+>~ = diretorio home (como de fosse o meus documentos)
+># = root (# = lasanha.. kkkk), $ = usuario comum 
+id
+>uid
+>gid = identifocacao de grupo 
+sudo su - (mudo para o root) 
+> Variável PS1 (por convencao sempre maiusculas)
+echo $PS1 (mostra a configuracao) 
+export PS1='[\u@\h:\w:\t] \$ ' (ajusta do prompt do linux com caminho completo + hora)
+>W no comando acima traz só o Dir corrente 
+>está definida no .bashrc (tem que mudar aqui para ficar permanente) - SHell 
+> .arquivo = arquivo oculto para ver uso -a
+man bash(funciona offline q para sair / para pesquisar n para próximo)
+history (guarda no logout o histórico de comendos do usuário corrente)
+HISTSIZE quantos comandos apresenta (últimos) mesmo com source tem que fazer logout
+HISTFILESIZE quantos guarda no arquivo
+
+>Dica: ver o site que permite testar o linux sem instalar deploy.co tem uma URL específica
+> a cada 02 horas eles matam a sua máquina 
+> sync com conta do github 
+export EMPRESA = 'NETWORKPRO'
+
+set mostra as variaveis de amnbiente setadas
+set | grep EMPRESA
+> | é um cano mesmo, um tubo pega a saida do 1o comando e joga para o segundo executar
+> grep busca uma palavra dentro de um arquivo 
+set | grep -i empreSA (-i fala pro grep ignorar o case)
+> Se quero guardar esta variável para futuras threads de terminal escrevo no .bashrc
+> Lembrando que traz só do usuário corrente (contexto)
+> o arquivo correto para o ambiente é o /etc/environment #variaveis
+source /etc/environment (relê o arquivo sem precisar de logout login)
+>arquivo .profile (executa o BASH se ele existir)
+unset EMPRESA (mata a variavel)
+clear = CTRL L 
+logout = CTRL D sai do SHell 
+> acessar comando da lista ex. history
+!1900 (executa o ID do history)
+![inicio do comando] (perigoso pra K)
+CTRL R e digita o comando que quero vai com CTRL D para variar dentro do search 
+cd - volta para o ultimo diretório acessado 
+cd vai para o home do usuario
+cat etc/shells
+> tmux (abre um shell e fica executando) e screen
+zsh
+>fhs lsb linuqueiros seguem estes padroes 
+>estamos na fhs3   Filesystem Hierarchy Standard
+>>/ raiz (arvore invertida)
+> azul claro = link simbólico (atalho) -> aponta para outro arquivo
+>> /bin binarios e sem controle de acesso (uso universal) não precisa ser root
+>> /sbin só o root usa ex fsk (scandisk) route reboot ifconfig....
+>> /boot tudo que preciso para bootar a maquina grub... instalado na trilha 0 boot loader
+  aqui tambem tem as versoes do kernel disponiveis
+uname -a traz as informacoes do kernel em uso no momento, maquina...detalhes de compilacao
+  plataforma e nome do sistema operacional, tamanho do kernel 6.8MB tem alguns com 600K
+uname -r só mostra o release do kernel 
+>> /dev devices colorido é device de bloco (armazena) ou de caractere (transfere)
+> sda (físico) nome do disco ex sda4 (quarta particao) do sda 
+> particoes logicas (max12) e promarias (max4): max 3 primarias + 12 logicas = 15
+> sdX[1-4] particoes primarias, sdX[5-15] particoes logicas 
+> cat /dev/psaux (entendi que pega o mouse)
+> dá para fazer um cat no disco também 
+> reset para dar um flush no SHel; 
+> ls 1C não é para permissao para tipo de arquivo b = bloco c = ttyS2 = dev de caractere
+> d = diretorio, - = arquivo comum (text0), s = socket, l = link simbólico 
+>> /etc (diretório de configuracao rede, apache, dns, binding)
+> cat /etc/passwd (informações dos usuários)
+>> /home (meus documentos) por usuário rs.. caixinha de areia 
+> diretório home do root é o /root
+>> /lib (library bibliotecas dinamicas (e compartilhadas)... as DLLs do azulzinho)
+> nao remover uma lib na unha 
+> /usr/lib usr/games/lib ... 
+>> /lib/modules = drivers 
+> visitar por curiosidade /lib/modules/[verso do kernel]/kernel/drivers/net/realtek >.ko
+> biblioteca .so módulo .ko (sao um dos unicos arquivos com extensao no Linux)
+ldd /bin/ls (mostra as bibliotecas utilizadas pelo comando (binário))
+>> /lib64 arquitetura 64
+>> /lost+found para Linux "Journaled" arquivos recuperados 
+> ext2 foi o ultimo file system sem journal 
+> sistemas de arquivo razerfs xfs ext4
+>> /media (midias removiveis locais
+>> /mnt dispositivos remotos, compartilhamentos
+>> /opt instalar tudo que nao é da distro ex office 
+>> /proc (virtual) trazer informações dinamicas sobre o ambiente PIDs  
+cat meminfo
+cat cpuinfo >bogomips   
+cat loadavg
+ps -ef (visualizar processos no Linux)
+> PID ex 1254 vai em proc/1245 tem varios arquivos referentes ao processo
+cat cdmline (mostra o comando usado para iniciar / chamar o processo)
+>> PID 1 é o init da máquina 
+>> /snap 
+>> /tmp (arquivos temporários) limpo toda vez que reiniciar a maquina 
+>> /usr maior diretorio do Linux, tudo que não vez parte da instalacao vem pra cá 
+> segunda arquitetura de diretório, /bin é da distro
+> /usr/share/doc  com vários .gz que é a documentação compactada
+> /usr/share/man/man1
+man du 
+> o man descompacta a pagina de help na abertura man1..9 
+>> /var (logs, filas) sistema escreve dados durante a sua operação
+> sofre constantes alteracoes 
+tail -f /var/log/auth.log (-f mantém o arquivo aberto)
+** Excelente para log dinamico 
+> /var/cache/apt/archives (tudo que usou nas instalacoes)
+apt-get clean (limpa esse cache todo > todos os .deb)
+> /var/lib/docker tem o cache do docker 
+>> /srv dados estáticos de serviços que o servidor provê (antigo, desde o fhs2)
+>> /sys (informações dos devices drivers do kernel)
+>> /run (tudo o que está rodando) era o /var/run (antigo) dados de runtime 
+> apaga no reboot
+cat [processo].pid
+ps -ef | grep [PID]
+
+Tópico: VIM 
+> Atalhos 
+i ou a (entra em insercao com 1 caractere para frente)
+A já insere no final de linha 
+I já pula para o nício da linha
+o entra em insercao na linha de baixo 
+O (o maiusculo) na linha de cima 
+esc sai do modo de insersao 
+setinhas ou hjkl 
+x apaga dir
+X apaga esq
+** "--simples como voar"
+dd apaga ou recortar a linha inteira 
+u undo voltar apagar (CTRL Z)
+CTRL R redo
+yy copiar
+p colar  
+y2y copia 02 linhas yXy X linhas 
+d2d recorta 02 linhas 
+v (muda para o modo visual) recortar palavra y e p ... (prático... )
+CTRL v seleção de blocos y e p 
+> Comandos de arquivo
+: modo de comando 
+:w resumo_vi.txt (pois não nomeei na entrada)
+:wq ou :x grava + sai 
+:q! (para sair sem salvar)
+ZZ - zalva e zai 
+> Outros comandos
+:r [nome do arquivo] pega o cat do arquixo e puxa para dentro do arquivo atual (adiciona)
+** dica Foda
+:o [nome do outro arquivo] ele abre o outro arquivo
+:slip [nome do outro arquivo] divide a tela pula com CTRL ww
+CTRL ww pula janela 
+** dica Foda 
+> com área de transferência entre os arquivos 
+:wq em cada um para sair 
+:vsplit vertical split 
+> Comandos do SHell
+:!date executa o comendo date do SHell
+:.!date coloca a saida do date [qualquer comando do SHell] no arquivo
+> Comandos de localização
+/[palavra] (busca palavra dentro do texto de cima para baixo)
+n próximo
+N anterior (de baixo para cima)
+?[palavra] Localiza a palavra sempre de Baixo para cima (é o / invertido)
+:set nu ou :set number enumera as linhas para referencia 
+:[linha]s/textoA/textoB 
+:28s/Zalva/Salva (troca Zalva por Salva na linha 28)
+:%s/modo/MODO substitui e mostra a quantidade (Muda só uma entrada por linha) 
+:%s/modo/MODO/g   "  muda todas de todas as linhas 
+
+> Color 
+:syntax on/off > Reconhece a linguagem pela extensao do arquivo aberto 
+:set hlsearch para fazer highlight nas buscas (pelos comandos já aprendidos)
+
+Tópico Permissões 
+chmod - modifica as permissoes de um arquivo ou dir
+chown - modifica o dono de um arquivo ou dir 
+chgrp - modifica o grupo de um arq (serve para PN)
+
+octal - 777
+simbólico - rwxrwxrwx
+
+r - Leitura
+w - Escrita
+x - Execução 
+
+- 0
+r 4
+w 2
+x 1
+
+u dono
+g grupo dono
+o outros
+a todos
+1    2     3     4
+-   rwx   rwx   rwx
+1. tipo de arquivo (b, ....)
+2. permissoes do dono
+3. permissao do grupo dono
+4. permissoes de outro 
+Case
+-    rw-   r-x   r-x 
+2 dono pode ler e escrever mas nao pode executar
+3 grupo e outros podem ler mas nao pode escrever  
+Escrita pode excluir 
+> Importante: diretórios tem que estar com permissao de execucao x
+> Quando for passar a opcao para alguem passar em octal (continha)
+No caso: 655 (4+2+0  4+0+1  4+0+1)
+chmod 777 [nome do arquivo]
+chmod u=rw,g=r,o=r [nome do arquivo] - este é o modo simbólico
+> Teste com arquivo criado com touch
+> ls -lha (para mostrar as permissoes)
+-rw-r--r-- 644
+chmod 655 aula-linux
+-rw-r-xr-x olha ai 655 adicionou execução.
+chmod 665 aula-linux
+-rw-r-xr-x olha ai 665 adicionou execução.
+> Voltando as permissões 
+chmod g-w,o-x (para adicionar permissoes uso +)
+chmod a=rw (all = todos e seto rw) seria chmod 666 no octal 
+ls -lhad [nome do dir] para mostrar permissoes só do diretório 
+mkdir -p aula-hoje/opa/epa/ipa cria um diretório dentro do outro mesmo que não 
+ exista 
+ls -R (maiúsculo mostra a arvore de diretório) - recursivo para consulta, 
+> aplicacao, remocao..
+Marcelos-MacBook-Pro-15:Desktop andrioti$ ls -R aula-hoje/
+opa
+aula-hoje//opa:
+epa
+aula-hoje//opa/epa:
+ipa
+aula-hoje//opa/epa/ipa:
+ls -lhR aula-hoje (traz as permissoes)
+chmod -R 777 aula-hoje
+umask (define a permissao padrao a ser aplicada a dir e arqs criados)
+> padrao 0022 (666 - 0022 = 644) 
+> arquivos full tem perm padrao 666
+> dir tem perm full padrao 777
+umask 0044 (altero com este comando)
+> Teste com arquivo novo, gerando 622
+chown ubuntu arq-novo 
+chown :users arq-novo (: para mudar o grupo dono) (já resolve o chgrp)
+chown root:root arq-novo (com -R que faz tudo recursivo)
+
+Tópico: Gerenciamento de usuários 
+> Arquivo com todas as informações de usuário /etc/passwd 
+cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+> nome:x(senha nao esta mais aqui):
+> x senha foi para o shadow ! se tirar o x daqui o usuário loga sem senha 
+> 0 (uid) identificacao do usuário
+> 0 (gid) grupo primario 
+> root (descricao, comentátio, nome sala...)
+> /root é o home do usuário 
+> /bin/bash qual é o SHell que este usuário usa, /nologin para quem não precisa
+> Senha no shadow 
+cat /etc/shadow * quando não tem senha 
+> no caso do instrutor AWS não tem senha para root, login através de certificado, 
+>  não senha, para usuário criado gera um HASH aqui. 
+adduser [nome] (cria um grupo com o mesmo nome, coloca o usuário nele, cria o 
+>  dir home para ele e copia arquivos de /etc/skel como bash.. Dica Politicas..)
+> pede a senha, descritivos, deve dar para configurar as informacoes. 
+> Sempre cria com uid > 1000 debians, RH > 500 
+> Posso mudar o bash, por exemplo, editando o passwd 
+chsh [usuario] (muda o SHell de um usuário) eg. /usr/bin/zsh  
+> Logando 1a vez (su - novo_user) vai pedir para configurar o zsh 
+sudo su - (volta para o root)
+passwd [user] muda a senha do usuário 
+> root não tem que seguir a politica de senhas 
+passwd -l [user] (loca, bloqueia a conta, root ainda consegue)
+passwd -u [user] (unlock)
+passwd -e [user] (expira a senha)
+passwd -d [user] (remove a senha)
+deluser [user] (remove usuário, se só tiver ele no grupo vai também!) 
+delgroup [group] 
+> Importante não remove o home (não remove o conteúdo de volume)
+userdel -r (remove também o home)
+useradd ... (não pergunta nada)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

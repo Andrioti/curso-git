@@ -1,0 +1,6 @@
+# Logfile created on 2018-11-14 21:44:58 -0200 by logger.rb/56438
+I, [2018-11-14T21:44:58.757280 #38985]  INFO -- : iniciando definicoes em def_dig....rb
+W, [2018-11-14T21:44:58.757327 #38985]  WARN -- : Warn teste iniciando definicoes em def_dig....rb
+I, [2018-11-14T21:44:58.757370 #38985]  INFO -- : logando no cloud...
+I, [2018-11-14T21:44:58.757393 #38985]  INFO -- : login com sucesso.
+I, [2018-11-14T21:44:58.757415 #38985]  INFO -- : provisionado com sucesso.

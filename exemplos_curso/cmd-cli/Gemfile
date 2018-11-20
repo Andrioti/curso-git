@@ -1,0 +1,6 @@
+source :rubygems 
+# = "https://rubygems.org"
+
+gem 'thor', '~> 0.20.3'
+# gem 'thor', '~> 0.20.0' no exemplo do Mateus 
+

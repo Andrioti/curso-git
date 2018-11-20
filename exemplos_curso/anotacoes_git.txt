@@ -1,0 +1,64 @@
+
+> apt-get / apt install git (local)
+> Criar conta Git
+> Inicializar diretorio 
+git init
+> 03 camadas 
+> criou dir .git = Dir de Trabalho
+ls -lha 
+git status > mostra os arquivos que não estão sendo rastreado (em vermelho)
+git add [arq] > Mandei para o Index
+> Agora esta sendo rastreado > mudou para verde
+> git rm remove do controle do git
+> Commit Mando para Head (vai guardar no Repo)
+git commit -m "Primeiro Commit" README.md
+> tive que ajustar em config --global o .email e .name do user 
+> Vai para a Branch padrão 
+> Por enquanto ainda está tudo local, nada foi "linkado" com o GitHub
+commit -m > para inserir a mensagem
+> Para ver de tem algo solto
+root@fsociety01:~/curso-git# git status
+No ramo master
+nothing to commit, working tree clean
+> Linkar Repo
+git remote add origin https://github.com/Andrioti/curso-git.git
+git push -u origin master
+> origin é o apelido do repo remoto
+> master é a branch principal
+> vai pedir usuário e senha, sempre, a cada push
+> Ao inves de ficar pedindo user e pass a cada push
+> Vamos editar /root/.ssh/id_rsa.pub (no meu caso tive que criar)
+ssh-keygen -t rsa -b 4096 -C "mandrioti@icloud.com"
+> Mesmo e-mail cadastrado na conta Git (o do login)
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa):
+Created directory '/root/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Passphrases do not match. Try again.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /root/.ssh/id_rsa.
+Your public key has been saved in /root/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:b11WO8et3RoTw/aJjkLWVU4OM4OUo+AYTnqqUCkc5+Q mandrioti@icloud.com
+The key's randomart image is:
++---[RSA 4096]----+
+| ..o |
+| . o o . + = o |
+|. *.+ + . . . X .|
+|..oE + . . o =o|
+| o o S . . Bo+|
+|. . + o +.*=|
+|. . o o ..+.+|
+| . o o + |
+| .. .. |
++----[SHA256]-----+
+> Olha o tamanho da pamonha:
+root@fsociety01:~/curso-git/curso-git# cat /root/.ssh/id_rsa.pub
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCnNRr2EvEXA0Y2BsAyintwfgCQHqysIhZw9DadNYPU0ghUS/Tf35a8b+9sE+x23EGuyqV2IwleToKPW7MyJIp1aRwcE4a8hAsoZp5fF+X6F29gHPvz+P+/nXtmIw4g6iJmCCxXpTJHE0/k9iTVjwSN63UECir0XNJcde8jq75T2A64jwWIwcUMtF2STt5YFeEeIAVvPEI8MQyKUMvW1kPYBJIPO20iLijo1ISTQByDx385q6mAkzQBSGLm9c38mykYSu+f35xPdWX+yS1KeP1tBkTNZrzJz9JfggSGgOYlQ1AmDTQOi/2WjG6KTyV6KriLeDlEnvNdFHggaXfnwQAbQwGU0JThrrZ4WYwIxUT8mF4KAaJONEu90HIgNJCx5/sIIMtVaZjz9u9zwRzGrMiXwRSNU8/g25ePp/YsTvSdRuhs5dhVyIu2logaDXp7zdEN5XUfQbl+NYDTYNuwdVfsXohe1OQyRWQ5KGxfj3OmYbtQS3Y05fsHgQkrkcqtxVVJKEhLVLQM3mWZM5tTk5m7a0k8vpEERRYus4qgpbc6LhckcdhIfd5iKBOml2zmZAL8cugsYzOCU9lbJePUt8CJVU+/rrfXVcY0RVCVYUItNRqtuOgKTmmhySG/Zt+/ZSHgtWTHRXJCmv0iZlsEsNtnfrfSWKFpvDr/CH7zO3W2uw== mandrioti@icloud.com
+> Copiar e colar no Git em: Settings, menu esq: SSH and GPG keys
+
+
+
