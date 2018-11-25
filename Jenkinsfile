@@ -4,6 +4,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'docker build -t andrioti/marketplace-api .'
+        sh 'env'
       }
     }
     stage('Tests') {
@@ -13,7 +14,7 @@ pipeline {
     }
     stage('Aproval') {
       steps {
-        input 'Você aprova isto para Deploy'
+        input 'VocÃª aprova isto para Deploy'
       }
     }
     stage('Deploy ') {
